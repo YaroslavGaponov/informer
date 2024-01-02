@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+
+const { readdir, stat, unlink } = require('fs/promises');
+
+const NODE_MODULES = '/node_modules/';
+
+const FILE_MASKS = [
+    '.gitignore',
+    'makefile',
+    '.gitlab-ci.yml',
+    '.npmignore',
+    '.eslintrc.js',
+    '.eslintignore',
+    '.npmrc',
+    '*.bat',
+    '*.sh',
+    'authors',
+    // 'dockerfile*',
+    'docker-compose*',
+    'license',
+    '.travis.yml',
+    '*.md',
+    'readme*',
+    '*.map',
+    'changelog*'
+].map(wildcardToRegExp);
+
+
+async function prune(path) {
+    const result = { total: 0, deleted: 0 };
+    const isNodeModules = path.indexOf(NODE_MODULES) >= 0;
+    try {
+        const files = await readdir(path);
+        for (const file of files) {
+            const fullpath = path + '/' + file;
+            const info = await stat(fullpath);
+            if (info.isDirectory()) {
+                const ret = await prune(fullpath);
+                result.total += ret.total;
+                result.deleted += ret.deleted;
+            } else if (info.isFile()) {
+                const found = isNodeModules && FILE_MASKS.some(mask => mask.test(file));
+                if (found) {
+                    console.log('file', fullpath, 'deleted');
+                    await unlink(fullpath);
+                    result.deleted += info.size;
+                }
+                result.total += info.size;
+            }
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    return result;
+}
+
+function wildcardToRegExp(s) {
+    return new RegExp('^' + s.split(/\*+/).map(regExpEscape).join('.*') + '$', 'i');
+}
+
+function regExpEscape(s) {
+    return s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+}
+
+(async function (root) {
+    console.log('npm-prune')
+    const { total, deleted } = await prune(root);
+    console.log('total', total, 'deleted', deleted, 'prune', 100 * deleted / total, '%');
+})(process.argv[2] || process.cwd());

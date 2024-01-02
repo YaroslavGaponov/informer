@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  informer:
+    build: .
+    environment:
+      - LOG_LEVEL=all
+      - CONFIG=/usr/app/etc/config.yaml
+      - PORT=8888
+    ports:
+      - '8888:8888'
+    volumes:
+      - ./etc:/usr/app/etc
+

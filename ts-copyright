@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
+const COPYRIGHT = `/*
+ * The code is licensed under the MIT License and was authored by Yaroslav Gaponov.
+ */
+`;
+
+if (process.argv.length !== 3) {
+    console.log(`usage: copyright {root folder}`);
+    process.exit(0);
+}
+const root = path.resolve(process.argv[2]);
+
+function trace(folder) {
+    console.log(folder);
+    const list = fs.readdirSync(folder);
+    list.forEach(name => {
+        const fullName = path.join(folder, name)
+        const stat = fs.statSync(fullName);
+        if (stat.isDirectory()) {
+            trace(fullName)
+        } else if (stat.isFile() && folder.includes("src") && !folder.includes("node_modules") && path.extname(name) === ".ts") {
+            const body = fs.readFileSync(fullName, { encoding: "utf8" });
+            if (!body.startsWith("/*")) {
+                fs.writeFileSync(fullName, COPYRIGHT + os.EOL + body);
+            }
+        }
+    });
+}
+
+trace(root);

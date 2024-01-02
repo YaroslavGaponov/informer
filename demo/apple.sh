@@ -1,0 +1,1 @@
+curl -XPOST http://localhost:8888/apple -d '{"from": "informer", "to": "d482531bf9ee214d14ad7593bd88d78991ec6bcece5c8982c917ae029ae641e1", "subject":"test", "text": "hello"}'

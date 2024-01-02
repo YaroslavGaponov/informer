@@ -1,0 +1,18 @@
+email:
+  host: "smtp.ethereal.email"
+  port: 587,
+  secure: false
+  auth:
+    user: "maddison53@ethereal.email"
+    pass: "jn7jnAPss4f63QBp6D"
+
+apple:
+  production: true
+  bundleId: "com.aryansbtloe.apns-tester.sample.ios"
+  token:
+    key: "-----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQghFSWcF5xPyTzmuDg\nucGYjxNsflWsVABuUFLRfj3YHLqgCgYIKoZIzj0DAQehRANCAASyy3Aclzf4dZ5n\n6YPkoxcFHzRsCusrgDPO72JZ9+hCkJXmrNm7RTy+gKTy7E5hICBHTNfiYnIinmK2\np90EoQj0\n-----END PRIVATE KEY-----"
+    keyId: RSHBA9D4N9
+    teamId: F474LTNP59
+
+google:
+  key: AAAAumiIKmY:APA91bGn_59TCJ3JzkoVS8H9vw7DIDInNc3egySrJ_VG1qZQL7XWq1AMdAybFje0Z6K28_ziTC6KUPiG-aG-7r5V9rE4XWi8GfDQhZF4UPfY6afeSAcmX_Dp2i5dmKkHd8fSm3FjaXBA

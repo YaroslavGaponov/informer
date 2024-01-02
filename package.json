@@ -1,0 +1,31 @@
+{
+  "name": "informer",
+  "version": "0.0.1",
+  "description": "service for sending notification messages",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --max-semi-space-size=128 dist/main.js",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "copyright": "node ./ts-copyright ./src",
+    "prune": "node ./npm-prune"
+  },
+  "author": "Yaroslav Gaponov",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/figlet": "latest",
+    "@types/node": "latest",
+    "@types/nodemailer": "latest",
+    "@types/node-gcm": "latest",
+    "typescript": "latest",
+    "tslint": "latest"
+  },
+  "dependencies": {
+    "@parse/node-apn": "latest",
+    "figlet": "latest",
+    "node-gcm": "^1.1.3",
+    "nodemailer": "latest",
+    "reflect-metadata": "latest",
+    "yaml": "latest"
+  }
+}
