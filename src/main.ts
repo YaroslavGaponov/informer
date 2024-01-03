@@ -16,7 +16,6 @@ if (info.uid === 0 || info.gid === 0) {
     console.warn("WARNING: You are running this application as root. This is not recommended.");
 }
 
-
 const httpServer = HttpServerFactory.create();
 
 process.once("SIGINT", async () => {
