@@ -5,7 +5,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { IHandler, IProvider } from "../../interface";
 import { ProviderType } from "../../type";
-import { notFound, serverError } from "../response";
+import { notFound, ok, serverError } from "../response";
 import { HttpRouter } from "../http-router";
 import { readFileSync } from "fs";
 import { parse } from "yaml";
@@ -48,12 +48,11 @@ export class InformerHandler implements IHandler {
             .once("error", err => serverError(res, err))
             .on("data", chunk => chunks.push(chunk))
             .once("end", async () => {
-
                 try {
                     const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
                     const result = await provider.send(body);
                     res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify(result));
+                    return void ok(res, result);
                 } catch (err) {
                     return void serverError(res, err);
                 }
