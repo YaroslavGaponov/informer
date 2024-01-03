@@ -6,5 +6,5 @@ import { ServerResponse } from "http";
 
 export function serverError(res: ServerResponse, details: any) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
-    res.end({ code: "SERVER_ERROR", details });
+    res.end(JSON.stringify({ code: "SERVER_ERROR", details }));
 }

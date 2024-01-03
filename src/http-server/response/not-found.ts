@@ -6,5 +6,5 @@ import { ServerResponse } from "http";
 
 export function notFound(res: ServerResponse, details: string) {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end({ code: "NOT_FOUND", details });
+    res.end(JSON.stringify({ code: "NOT_FOUND", details }));
 }
