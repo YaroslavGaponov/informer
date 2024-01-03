@@ -3,3 +3,4 @@
  */
 
 export * from "./informer-handler";
+export * from "./openapi-handler";

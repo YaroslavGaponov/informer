@@ -3,15 +3,34 @@
  */
 
 import { IncomingMessage, ServerResponse } from "http";
-import { IHttpHandler, IProvider } from "../../interface";
+import { IProvider } from "../../interface";
 import { ProviderType } from "../../type";
 import { notFound, serverError } from "../response";
+import { HttpRouter } from "../http-router";
+import { readFileSync } from "fs";
+import { parse } from "yaml";
+import { ConfigureFactory } from "../../configure/configure-factory";
+import { Providers } from "../../provider";
 
-export class InformerHandler implements IHttpHandler {
+export class InformerHandler {
 
     private readonly providers = new Map<ProviderType, IProvider>();
 
-    handler(req: IncomingMessage, res: ServerResponse): void {
+    constructor(router: HttpRouter) {
+        const configure = ConfigureFactory.getOrCreate();
+        const yaml = parse(readFileSync(configure.config, "utf8"));
+        for (const type in yaml) {
+            this.addProvider(new Providers[type as ProviderType](yaml[type]));
+        }
+        const handler = this.handler.bind(this);
+        router
+            .addHanlder("POST", "/email", handler)
+            .addHanlder("POST", "/google", handler)
+            .addHanlder("POST", "/apple", handler)
+            ;
+    }
+
+    private handler(req: IncomingMessage, res: ServerResponse): void {
         const type = req.url?.slice(1) as ProviderType;
         if (!(type && type in ProviderType)) {
             return void notFound(res, `Provider ${type} is not found`);

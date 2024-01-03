@@ -19,6 +19,11 @@ npm run start
 docker-compose up --build
 ```
 
+## OpenAPI
+```sh
+open http://localhost:8888
+```
+
 ## Send email
 
 ```sh
