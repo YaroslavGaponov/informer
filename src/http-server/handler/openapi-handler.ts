@@ -4,18 +4,19 @@
 
 import { IncomingMessage, ServerResponse } from "http";
 import { HttpRouter } from "../http-router";
+import { IHandler } from "../../interface";
 
-export class OpenApiHandler {
+export class OpenApiHandler implements IHandler {
 
-    constructor(router: HttpRouter) {
-        router
-            .addHanlder("GET", "/", this.sendHtml.bind(this))
-            .addHanlder("GET", "/index.yaml", this.sendYaml.bind(this))
-            ;
-    }
+  hook(router: HttpRouter): HttpRouter {
+    return router
+      .addHanlder("GET", "/", this.sendHtml.bind(this))
+      .addHanlder("GET", "/index.yaml", this.sendYaml.bind(this))
+      ;
+  }
 
-    private sendYaml(req: IncomingMessage, res: ServerResponse<IncomingMessage>): void {
-        const INDEX_YAML = `
+  private sendYaml(req: IncomingMessage, res: ServerResponse<IncomingMessage>): void {
+    const INDEX_YAML = `
         openapi: 3.0.0
         info:
           title: Informer API
@@ -59,12 +60,12 @@ export class OpenApiHandler {
                   description: server error
         
         `;
-        res.writeHead(200, { 'Content-Type': 'application/yaml' });
-        res.end(INDEX_YAML);
-    }
+    res.writeHead(200, { 'Content-Type': 'application/yaml' });
+    res.end(INDEX_YAML);
+  }
 
-    private sendHtml(req: IncomingMessage, res: ServerResponse<IncomingMessage>): void {
-        const INDEX_HTML = `
+  private sendHtml(req: IncomingMessage, res: ServerResponse<IncomingMessage>): void {
+    const INDEX_HTML = `
         <html>
         <head>    
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.17.0/swagger-ui.css">
@@ -90,8 +91,8 @@ export class OpenApiHandler {
         </body>
         </html>
         `;
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(INDEX_HTML);
-    }
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(INDEX_HTML);
+  }
 
 }

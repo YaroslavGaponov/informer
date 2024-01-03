@@ -3,7 +3,7 @@
  */
 
 import { IncomingMessage, ServerResponse } from "http";
-import { IProvider } from "../../interface";
+import { IHandler, IProvider } from "../../interface";
 import { ProviderType } from "../../type";
 import { notFound, serverError } from "../response";
 import { HttpRouter } from "../http-router";
@@ -12,18 +12,22 @@ import { parse } from "yaml";
 import { ConfigureFactory } from "../../configure/configure-factory";
 import { Providers } from "../../provider";
 
-export class InformerHandler {
+export class InformerHandler implements IHandler {
 
     private readonly providers = new Map<ProviderType, IProvider>();
 
-    constructor(router: HttpRouter) {
+    constructor() {
         const configure = ConfigureFactory.getOrCreate();
         const yaml = parse(readFileSync(configure.config, "utf8"));
         for (const type in yaml) {
             this.addProvider(new Providers[type as ProviderType](yaml[type]));
         }
+
+    }
+
+    hook(router: HttpRouter): HttpRouter {
         const handler = this.handler.bind(this);
-        router
+        return router
             .addHanlder("POST", "/email", handler)
             .addHanlder("POST", "/google", handler)
             .addHanlder("POST", "/apple", handler)
