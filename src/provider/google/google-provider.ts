@@ -7,7 +7,7 @@ import { ILogger, IProvider, Runnable } from "../../interface";
 import { ProviderType, Message } from "../../type";
 import { Sender, Message as GoogleMessage } from "node-gcm";
 
-export class GoogleProvider implements Runnable, IProvider {
+export class GoogleProvider implements IProvider {
     @logger
     private readonly logger!: ILogger;
 

@@ -7,7 +7,7 @@ import { ILogger, IProvider, Runnable } from "../../interface";
 import { ProviderType, Message } from "../../type";
 import { Notification, Provider } from "@parse/node-apn";
 
-export class AppleProvider implements Runnable, IProvider {
+export class AppleProvider implements IProvider {
 
     @logger
     private readonly logger!: ILogger;

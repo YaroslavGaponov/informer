@@ -7,7 +7,7 @@ import { ILogger, IProvider, Runnable } from "../../interface";
 import { Message, ProviderType } from "../../type";
 import { createTransport, Transporter } from "nodemailer";
 
-export class EmailProvider implements Runnable, IProvider {
+export class EmailProvider implements IProvider {
 
     @logger
     private readonly logger!: ILogger;

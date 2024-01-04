@@ -3,7 +3,7 @@
  */
 
 import { IncomingMessage, ServerResponse } from "http";
-import { IHandler, IProvider } from "../../interface";
+import { IHandler, IProvider, Runnable } from "../../interface";
 import { ProviderType } from "../../type";
 import { notFound, ok, serverError } from "../response";
 import { HttpRouter } from "../http-router";
@@ -12,7 +12,7 @@ import { parse } from "yaml";
 import { ConfigureFactory } from "../../configure/configure-factory";
 import { Providers } from "../../provider";
 
-export class InformerHandler implements IHandler {
+export class InformerHandler implements IHandler, Runnable {
 
     private readonly providers = new Map<ProviderType, IProvider>();
 
@@ -23,6 +23,18 @@ export class InformerHandler implements IHandler {
             this.addProvider(new Providers[type as ProviderType](yaml[type]));
         }
 
+    }
+
+    async start(): Promise<void> {
+        for (const [, provider] of this.providers) {
+            await provider.start();
+        }
+    }
+
+    async stop(): Promise<void> {
+        for (const [, provider] of this.providers) {
+            await provider.stop();
+        }
     }
 
     hook(router: HttpRouter): HttpRouter {

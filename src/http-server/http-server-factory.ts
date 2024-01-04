@@ -7,10 +7,16 @@ import { HttpRouter } from "./http-router";
 import { InformerHandler, OpenApiHandler } from "./handler";
 
 export class HttpServerFactory {
-    static create(): HttpServer {
-        const handlers = [new InformerHandler(), new OpenApiHandler()];
+    static async create(): Promise<HttpServer> {
         const router = new HttpRouter();
-        handlers.map(handler => handler.hook(router));
+
+        const informerHandler = new InformerHandler();
+        await informerHandler.start();
+        informerHandler.hook(router);
+
+        const openApiHandler = new OpenApiHandler();
+        openApiHandler.hook(router);
+
         return new HttpServer(router);
     }
 }
